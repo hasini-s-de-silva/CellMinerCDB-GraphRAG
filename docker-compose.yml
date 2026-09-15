@@ -1,0 +1,63 @@
+services:
+  streamlit-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      # Azure OpenAI Configuration
+      - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
+      - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
+      - AZURE_OPENAI_DEPLOYMENT_NAME=${AZURE_OPENAI_DEPLOYMENT_NAME:-gpt-4o-mini}
+      - AZURE_OPENAI_API_VERSION=${AZURE_OPENAI_API_VERSION:-2024-05-01-preview}
+      
+      # Database Configuration
+      - DBEAVER_URL=${DBEAVER_URL}
+      - DBEAVER_DATABASE=${DBEAVER_DATABASE:-postgres}
+      - DBEAVER_USERNAME=${DBEAVER_USERNAME}
+      - DBEAVER_PASSWORD=${DBEAVER_PASSWORD}
+      
+      # PandasAI Configuration
+      - PANDASAI_BYPASS_SECURITY=${PANDASAI_BYPASS_SECURITY:-true}
+      - PANDASAI_MAX_RETRIES=${PANDASAI_MAX_RETRIES:-1}
+    volumes:
+      # Mount logs directory for persistence
+      - ./logs:/app/logs
+      - ./exports:/app/exports
+      - ./sql_outputs:/app/sql_outputs
+      - ./output_csvs:/app/output_csvs
+    networks:
+      - cellminer-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional PostgreSQL service for local development
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=${POSTGRES_USER:-cellminer}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-change_me}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./datasets/postgres:/docker-entrypoint-initdb.d
+    networks:
+      - cellminer-network
+    restart: unless-stopped
+    profiles:
+      - with-db
+
+networks:
+  cellminer-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
