@@ -7,7 +7,7 @@
 
 **CellMinerCDB GraphRAG** is an open-source bioinformatics and scientific software project for exploring large-scale cancer pharmacogenomic data across genes, drugs, cancer cell lines, tissues and molecular measurements. It combines **CellMinerCDB, Python, R, PostgreSQL, biological knowledge graphs, NetworkX, GraphRAG, PandasAI, Azure OpenAI and Streamlit** in a reproducible research architecture.
 
-The project addresses a practical bioinformatics problem: pharmacogenomic evidence is distributed across datasets, modalities and identifier systems, while many research questions require connecting molecular features to drug response across heterogeneous cancer models. CellMinerCDB AI creates a computational layer that harmonises these data, represents biological relationships as a typed knowledge graph, retrieves relevant graph neighbourhoods for a research question, and exposes the underlying data through natural-language analytical workflows.
+The project addresses a practical bioinformatics problem: pharmacogenomic evidence is distributed across datasets, modalities and identifier systems, while many research questions require connecting molecular features to drug response across heterogeneous cancer models. CellMinerCDB GraphRAG creates a computational layer that harmonises these data, represents biological relationships as a typed knowledge graph, retrieves relevant graph neighbourhoods for a research question, and exposes the underlying data through natural-language analytical workflows.
 
 ## Highlights
 
