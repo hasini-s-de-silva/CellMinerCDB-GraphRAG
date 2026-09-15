@@ -28,12 +28,17 @@ flowchart TB
         K[Streamlit]
         L[Tables, plots, SQL, graph evidence]
     end
+    subgraph Quality[Engineering Quality]
+        M[GitHub Actions CI]
+        N[pytest test suite]
+    end
     A --> B --> C --> D
     D --> E
     E --> G
     F --> G --> H --> J
     D --> I --> J
     J --> K --> L
+    M --> N
 ```
 
 ## R extraction and harmonisation
@@ -94,3 +99,10 @@ GraphRAG and PandasAI solve different parts of the research problem. GraphRAG re
 - containerised execution;
 - least-privilege database access for interactive analysis;
 - clear separation between observed evidence and generated interpretation.
+
+
+## Continuous integration
+
+The repository uses GitHub Actions for automated validation on pushes to `main` and pull requests targeting `main`. The CI workflow creates a clean Python 3.11 environment, installs the package from `pyproject.toml` and runs the pytest suite.
+
+CI is intentionally isolated from external LLM credentials and production databases. Core knowledge-graph construction and GraphRAG retrieval can therefore be validated deterministically without requiring Azure OpenAI access or a live CellMinerCDB PostgreSQL instance. This keeps automated checks reproducible, secure and suitable for external contributions.
